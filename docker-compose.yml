@@ -1,0 +1,37 @@
+# nginx, automatic reverse proxy
+# ------------------------------
+#
+# handle its configuration using the host docker socket
+# which is mounted inside the container.
+#
+# see github.com/jwilder/nginx-proxy
+# you don't need to specify an host:container mapping for the ports
+# but I prefer being able to query directly my container if needed
+
+nginx:
+    image: jwilder/nginx-proxy:latest
+    volumes:
+        - /var/run/docker.sock:/tmp/docker.sock
+    ports:
+        - "80:80"
+
+# subsonic, web-based music player
+# --------------------------------
+#
+# use java:7 and subsonic package for ubuntu
+
+subsonic:
+    build: ./subsonic
+    ports:
+        - "4040:4040"
+        - "4050:4050"
+    environment:
+        VIRTUAL_HOST: "music.localdomain"
+    volumes_from:
+        - subsonicdata
+subsonicdata:
+    build: ./subsonic
+    volumes:
+        - /subsonic
+    command: "echo subsonic data container"
+
