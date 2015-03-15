@@ -1,0 +1,38 @@
+# nginx, automatic reverse proxy
+# ------------------------------
+#
+# handle its configuration using the host docker socket
+# which is mounted inside the container.
+#
+# see github.com/jwilder/nginx-proxy
+# you don't need to specify an host:container mapping for the ports
+# but I prefer being able to query directly my container if needed
+
+nginx:
+    image: jwilder/nginx-proxy:latest
+    volumes:
+        - /var/run/docker.sock:/tmp/docker.sock
+    ports:
+        - "80:80"
+
+
+# shaarli, a personnal links manager
+# ----------------------------------
+#
+# use php:apache in order to be consistent regarding .htaccess
+# and nginx reverse proxy
+
+shaarli:
+    build: ./shaarli/
+    ports:
+        - "8000:80"
+    environment:
+        VIRTUAL_HOST: "shaarli.localdomain"
+    volumes_from:
+        - shaarlidata
+shaarlidata:
+    build: ./shaarli/
+    volumes:
+        - /var/www/html/data
+    command: "echo shaarli data container"
+
