@@ -14,7 +14,7 @@ RUN apt-mark hold initscripts udev plymouth
 RUN apt-get update && apt-get -qy dist-upgrade && apt-get -q update && apt-get install wget
 
 # install subsonic
-RUN wget http://downloads.sourceforge.net/project/subsonic/subsonic/sonos-beta/subsonic-5.1.deb -O /tmp/subsonic.deb
+RUN wget http://downloads.sourceforge.net/project/subsonic/subsonic/5.2.1/subsonic-5.2.1.deb -O /tmp/subsonic.deb
 RUN dpkg -i /tmp/subsonic.deb && rm /tmp/subsonic.deb
 
 # Transcoders
