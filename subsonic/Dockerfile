@@ -27,6 +27,7 @@ RUN chown -R nobody:users /var/subsonic
 RUN mkdir /subsonic && chown -R nobody:users /subsonic
 
 USER nobody 
+VOLUME /subsonic
 CMD /usr/bin/subsonic \
     --home=/subsonic \
     --host=0.0.0.0 \
