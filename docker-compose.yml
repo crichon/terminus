@@ -33,4 +33,3 @@ selfossdata:
     volumes:
         - /var/www/html/data
     command: "echo selfoss data container"
-

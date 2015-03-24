@@ -2,11 +2,11 @@ from php:apache
 maintainer Christophe Richon <moi@crichon.eu>
 
 # install needed software
-RUN apt-get update && apt-get install -q -y ca-certificates sqlite wget unzip libpng12-dev \
+RUN apt-get update && apt-get install -q -y ca-certificates sqlite wget unzip curl libpng12-dev \
         && docker-php-ext-install gd
 
 # install selfoss
-RUN wget  -O selfoss.zip http://selfoss.aditu.de/selfoss-2.12.zip
+RUN wget -O selfoss.zip http://selfoss.aditu.de/selfoss-2.12.zip
 RUN unzip selfoss.zip && rm selfoss.zip
 
 # enable apache2 mode rewrite
@@ -25,4 +25,11 @@ RUN ln -s /var/www/html/data/config.ini /var/www/html/config.ini
 RUN mkdir -p /var/www/html/data/sqlite /var/www/html/data/cache /var/www/html/data/logs /var/www/html/data/thumbnails
 RUN chown -R www-data:www-data /var/www/html
 
+RUN echo "#!/bin/bash \n while sleep 600 \n do \n curl localhost/update \n done" \
+    > update.sh && chmod +x update.sh
+
+RUN echo "#!/bin/bash \n ./update.sh & \n apache2-foreground" \
+    > launch.sh && chmod +x launch.sh
+
 VOLUME /var/www/html/data
+CMD ./launch.sh
