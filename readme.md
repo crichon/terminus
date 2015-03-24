@@ -2,7 +2,7 @@
 
 ## Presentation
 
-Selfoss is *the multiprupose rss reader*.
+[http://selfoss.aditu.de/](Selfoss) is *the multiprupose rss reader*.
 
 In this directory you will find the dockerfile providing crichon/selfoss.
 It's based on **php:apache**.
@@ -21,7 +21,7 @@ Build and run:
 
 ## Details
 
-**php:apache** use port 80 by default, refer to [][its] documentation for details.
+**php:apache** use port 80 by default, refer to [https://registry.hub.docker.com/_/php/](its) documentation for details.
 
 All data are contained inside the volume:
 
