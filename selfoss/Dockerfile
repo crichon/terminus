@@ -25,7 +25,7 @@ RUN ln -s /var/www/html/data/config.ini /var/www/html/config.ini
 RUN mkdir -p /var/www/html/data/sqlite /var/www/html/data/cache /var/www/html/data/logs /var/www/html/data/thumbnails
 RUN chown -R www-data:www-data /var/www/html
 
-RUN echo "#!/bin/bash \n while sleep 600 \n do \n curl localhost/update \n done" \
+RUN echo "#!/bin/bash \n while sleep 3600 \n do \n curl localhost/update \n done" \
     > update.sh && chmod +x update.sh
 
 RUN echo "#!/bin/bash \n ./update.sh & \n apache2-foreground" \
