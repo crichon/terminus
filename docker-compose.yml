@@ -14,6 +14,7 @@ nginx:
         - /var/run/docker.sock:/tmp/docker.sock
     ports:
         - "80:80"
+
 # selfoss, a web-based rss reader
 # -------------------------------
 #
