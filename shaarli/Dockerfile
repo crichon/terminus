@@ -3,12 +3,12 @@ maintainer Christophe Richon <moi@crichon.eu>
 
 RUN apt-get update && apt-get install -q -y ca-certificates wget unzip php5-json
 
-RUN wget https://github.com/sebsauvage/Shaarli/archive/master.zip \
-&& unzip master.zip \
-&& mv Shaarli-master/* . \
-&& rm master.zip && rm -rf Shaarli-master
+RUN wget -O /usr/local/etc/php/php.ini https://raw.githubusercontent.com/php/php-src/master/php.ini-production
+RUN wget https://github.com/shaarli/Shaarli/archive/stable.zip && unzip stable.zip
+RUN mv Shaarli-stable/* .
+RUN rm stable.zip && rm  -rf Shaarli-stable # also delete .travis and .gitignore
 
-RUN mkdir /var/www/html/data && chown -R www-data:www-data /var/www/html/
+RUN chown -R www-data:www-data /var/www/html/
 
-VOLUME /var/www/html/data 
+VOLUME /var/www/html/data
 EXPOSE 80
