@@ -6,8 +6,8 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Update Ubuntu
 RUN apt-mark hold initscripts udev plymouth
-RUN apt-get update && apt-get -qy dist-upgrade 
-RUN apt-get -q update && apt-get -qy install wget locales
+RUN apt-get update && apt-get -qy dist-upgrade
+RUN apt-get -q update && apt-get -qy install locales
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
 
 # Set locale to UTF-8
@@ -16,7 +16,7 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
 # install subsonic
-RUN wget http://downloads.sourceforge.net/project/subsonic/subsonic/5.2.1/subsonic-5.2.1.deb -O /tmp/subsonic.deb
+ADD http://subsonic.org/download/subsonic-5.3.beta2.deb /tmp/subsonic.deb
 RUN dpkg -i /tmp/subsonic.deb && rm /tmp/subsonic.deb
 
 # Transcoders
@@ -28,7 +28,7 @@ RUN usermod -g 100 nobody
 RUN chown -R nobody:users /var/subsonic
 RUN mkdir /subsonic && chown -R nobody:users /subsonic
 
-USER nobody 
+USER nobody
 VOLUME /subsonic
 CMD /usr/bin/subsonic \
     --home=/subsonic \
