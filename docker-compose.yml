@@ -27,6 +27,8 @@ subsonic:
         - "4050:4050"
     environment:
         VIRTUAL_HOST: "music.localdomain"
+        VIRTUAL_PORT: 4050
+        VIRTUAL_PROTO: "https"
     volumes_from:
         - subsonicdata
 subsonicdata:
