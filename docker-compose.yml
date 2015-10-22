@@ -28,8 +28,11 @@ shaarli:
         - "8000:80"
     environment:
         VIRTUAL_HOST: "shaarli.localdomain"
+        HOSTNAME: "shaarli.localdomain"
     volumes_from:
         - shaarlidata
+    extra_hosts:
+        shaarli.localdomain: 127.0.0.1
 shaarlidata:
     build: ./shaarli/
     volumes:
