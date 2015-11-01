@@ -21,13 +21,22 @@ Build and run:
     docker build --name subsonic subsonic/
     docker run --name subsonic  -p 443:4050 -v {your_music_dir}:/music subsonic
 
-## Details
+## Compose details
 
-    VIRTUAL_PORTS: "4040", "4050"
-    VIRTUAL_PROTO: "https"
+Provide a runnging instance on http://music.localdomain and access to your music dir through a **samba share**.
+Launch using:
 
-All subsonic data are contained inside the volume:
+    docker-compose up
+
+Mount it using:
+
+    mount -t cifs //samba.localdomain/music -o domain=WORKGROUP,user=user,ver=2.0 #passwd user
+
+Configuration is done through modifying services *env variables* sections. Edit them to your likings.
+
+Subsonic data are contained inside the  following volumes:
 
     /subsonic
+    /music
+    /podcast
 
-Mount your music and podcast host directory on /music and /podcast.
