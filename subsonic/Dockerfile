@@ -16,7 +16,7 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
 # install subsonic
-ADD http://subsonic.org/download/subsonic-5.3.beta2.deb /tmp/subsonic.deb
+ADD http://subsonic.org/download/subsonic-5.3.deb /tmp/subsonic.deb
 RUN dpkg -i /tmp/subsonic.deb && rm /tmp/subsonic.deb
 
 # Transcoders
