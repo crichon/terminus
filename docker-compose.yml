@@ -20,7 +20,7 @@ nginx:
 #
 # use java:7 and subsonic package for ubuntu
 
-subsonic:
+music:
     build: ./subsonic
     ports:
         - "4040:4040"
@@ -29,11 +29,28 @@ subsonic:
         VIRTUAL_HOST: "music.localdomain"
         VIRTUAL_PORT: 4050
         VIRTUAL_PROTO: "https"
+        group: "users"
+        group_id: "1000"
+        user: "chris"
+        user_id: "1000"
     volumes_from:
-        - subsonicdata
-subsonicdata:
+        - music-data
+music-data:
     build: ./subsonic
     volumes:
         - /subsonic
+        - /music
     command: "echo subsonic data container"
 
+samba:
+    image: dperson/samba:latest
+    ports:
+        - "139:139"
+        - "445:445"
+    volumes_from:
+        - music-data
+    environment:
+        TZ: "Europe/Paris"
+        VIRTUAL_HOST: "samba.localdomain"
+        VIRTUAL_PORT": "445"
+    command: /usr/bin/samba.sh -u "user;user" -s "music;/music;yes;no;no;user"

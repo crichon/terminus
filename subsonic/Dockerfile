@@ -23,14 +23,15 @@ RUN dpkg -i /tmp/subsonic.deb && rm /tmp/subsonic.deb
 RUN ln /var/subsonic/transcode/ffmpeg /var/subsonic/transcode/lame /usr/local/bin
 
 # Set user nobody to uid and gid of unRAID
-RUN usermod -u 99 nobody
-RUN usermod -g 100 nobody
-RUN chown -R nobody:users /var/subsonic
-RUN mkdir /subsonic && chown -R nobody:users /subsonic
+RUN mkdir /subsonic /music
 
-USER nobody
+RUN echo ''' \
+useradd $user && chown -R $user:$group /music \
+''' > /bin/fix_user.sh && chmod +x /bin/fix_user.sh
+
 VOLUME /subsonic
-CMD /usr/bin/subsonic \
+CMD grep $user /etc/passwd || /bin/fix_user.sh \
+    && /usr/bin/subsonic \
     --home=/subsonic \
     --host=0.0.0.0 \
     --https-port=4050 \
@@ -39,3 +40,5 @@ CMD /usr/bin/subsonic \
     --default-podcast-folder=/podcast \
     --default-playlist-folder=/playlist \
     && sleep 5 && tail -f /subsonic/subsonic_sh.log
+#usermod -u $user_id $user \
+#usermod -g $group_id $group \
