@@ -1,0 +1,119 @@
+# nginx, automatic reverse proxy
+# ------------------------------
+#
+# handle its configuration using the host docker socket
+# which is mounted inside the container.
+#
+# see github.com/jwilder/nginx-proxy
+# you don't need to specify an host:container mapping for the ports
+# but I prefer being able to query directly my container if needed
+
+nginx:
+    image: jwilder/nginx-proxy:latest
+    volumes:
+        - /var/run/docker.sock:/tmp/docker.sock
+    ports:
+        - "80:80"
+
+# selfoss, a web-based rss reader
+# -------------------------------
+# use php:apache in order to be consistent regarding .htaccess
+# and nginx reverse proxy
+
+rss:
+    build: ./selfoss
+    ports:
+        - "8001:80"
+    environment:
+        VIRTUAL_HOST: "rss.localdomain"
+    volumes_from:
+        - rss-data
+rss-data:
+    build: ./selfoss/
+    volumes:
+        - /var/www/html/data
+    command: "echo selfoss data container"
+
+# shaarli, a personnal links manager
+# ----------------------------------
+# use php:apache in order to be consistent regarding .htaccess
+# and nginx reverse proxy
+
+shaarli:
+    build: ./shaarli/
+    ports:
+        - "8000:80"
+    environment:
+        VIRTUAL_HOST: "shaarli.localdomain"
+    volumes_from:
+        - shaarli-data
+    extra_hosts:
+        shaarli.localdomain: 127.0.0.1
+shaarli-data:
+    build: ./shaarli/
+    volumes:
+        - /var/www/html/data
+    command: "echo shaarli data container"
+
+# subsonic, web-based music player
+# --------------------------------
+##
+# use java:7 and subsonic package for ubuntu
+
+music:
+    build: ./subsonic
+    ports:
+        - "4040:4040"
+        - "4050:4050"
+    environment:
+        VIRTUAL_HOST: "music.localdomain"
+        VIRTUAL_PORT: 4050
+        VIRTUAL_PROTO: "https"
+    volumes_from:
+        - music-data
+music-data:
+    build: ./subsonic
+    volumes:
+        - /subsonic
+    command: "echo subsonic data container"
+
+# gitlab, open-source github with a ci stack
+# # ------------------------------------------
+
+gitlab:
+    image: gitlab/gitlab-ce:latest
+    ports:
+        - "8443:443"
+        - "8080:80"
+        - "2222:22"
+    volumes_from:
+        - gitlab-data
+    environment:
+        VIRTUAL_HOST: "gitlab.localdomain"
+gitlab-data:
+    image: alpine:latest
+    volumes:
+        - /var/opt/gitlab
+        - /var/log/gitlab
+        - /etc/gitlab
+    command: "echo gitlab data container"
+gitlab-runner:
+    image: gitlab/gitlab-runner:latest # alpune
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+    volumes_from:
+        - gitlab-runner-config
+    environment:
+        REGISTRATION_TOKEN: ""
+        CI_SERVER_URL: "http://gitlab/ci"
+        RUNNER_TAG_LIST: "docker,python"
+        DOCKER_IMAGE: "python2.7"
+        RUNNER_EXECUTOR: "docker"
+    links:
+        - gitlab
+gitlab-runner-config:
+    image: gitlab/gitlab-runner
+    volumes:
+        - /etc/gitlab-runner
+    command: "echo gitlab-runner config"
+
