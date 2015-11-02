@@ -21,7 +21,7 @@ nginx:
 # and nginx reverse proxy
 
 rss:
-    build: ./selfoss
+    image: .crichon/selfoss
     ports:
         - "8001:80"
     environment:
@@ -29,7 +29,7 @@ rss:
     volumes_from:
         - rss-data
 rss-data:
-    build: ./selfoss/
+    image: crichon/selfoss/
     volumes:
         - /var/www/html/data
     command: "echo selfoss data container"
@@ -40,7 +40,7 @@ rss-data:
 # and nginx reverse proxy
 
 shaarli:
-    build: ./shaarli/
+    image: crichon/shaarli
     ports:
         - "8000:80"
     environment:
@@ -50,7 +50,7 @@ shaarli:
     extra_hosts:
         shaarli.localdomain: 127.0.0.1
 shaarli-data:
-    build: ./shaarli/
+    image: crichon/shaarli/
     volumes:
         - /var/www/html/data
     command: "echo shaarli data container"
@@ -61,7 +61,7 @@ shaarli-data:
 # use java:7 and subsonic package for ubuntu
 
 music:
-    build: ./subsonic
+    image: crichon/subsonic
     ports:
         - "4040:4040"
         - "4050:4050"
@@ -72,7 +72,7 @@ music:
     volumes_from:
         - music-data
 music-data:
-    build: ./subsonic
+    image: crichon/subsonic
     volumes:
         - /subsonic
     command: "echo subsonic data container"
