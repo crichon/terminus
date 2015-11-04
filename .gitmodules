@@ -1,9 +1,9 @@
 [submodule "subsonic"]
 	path = subsonic
-	url = http://gitlab.terminus.crichon.eu:/docker/subsonic.git
+	url = http://github.com:/crichon/docker-subsonic.git
 [submodule "shaarli"]
 	path = shaarli
-	url = http://gitlab.terminus.crichon.eu/docker/shaarli.git
+	url = http://github.com/crichon/docker-shaarli.git
 [submodule "selfoss"]
 	path = selfoss
-	url = http://gitlab.terminus.crichon.eu/docker/selfoss.git
+	url = http://github.com/crichon/docker-selfoss.git
